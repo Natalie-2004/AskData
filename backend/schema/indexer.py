@@ -34,11 +34,13 @@ def build_index(schema_entries: List[Dict[str, Any]]):
     # )
 
     # in dev mode, use this free one from chroma
-    free_ef = embedding_functions.DefaultEmbeddingFunction()
+    local_ef = embedding_functions.SentenceTransformerEmbeddingFunction(
+        model_name="all-MiniLM-L6-v2"
+    )
 
     vector_col = client.create_collection(
         name="vector_index",
-        embedding_function=free_ef
+        embedding_function=local_ef
     )
 
     # keyword search
@@ -77,6 +79,8 @@ def build_index(schema_entries: List[Dict[str, Any]]):
     )
 
     print(f"Indexed {len(ids)} fields into ChromaDB")
+    print(f"vector_index: {vector_col.count()} documents")
+    print(f"keyword_index: {keyword_col.count()} documents")
 
 if __name__ == "__main__":
     entries = parse_db()
