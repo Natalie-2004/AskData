@@ -54,6 +54,7 @@ def get_llm():
         return ChatOpenAI(model=LLM_MODEL, api_key=OPENAI_API_KEY, temperature=0)
     
 def parse_llm_output(text: str) -> List[str]:
+    # normalize outputs by cutting off result prefix and slice into list by commas
     text = text.strip()
     for prefix in ["Result:", "Parsed Result: "]:
         if text.startswith(prefix):
